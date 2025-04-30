@@ -2,20 +2,20 @@
     import { currentUser } from '$lib/stores';
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
-    import { get } from 'svelte/store';
 
     let name = '';
-    let type = 'puppy';
+    let type = 'kitten';
     let error = '';
     let success = '';
 
     onMount(() => {
-        const user = get(currentUser);
-        if (!user) {
-            goto('/login');
-        } else if (user.role !== 'admin') {
-            goto('/');
-        }
+        const unsubscribe = currentUser.subscribe((user) => {
+            if (!user) {
+                goto('/login');
+            } else if (user.role !== 'admin') {
+                goto('/');
+            }
+        });
     });
 
     async function addPet() {
@@ -48,7 +48,6 @@
         }
     }
 </script>
-
 
 <h1>➕ Add a New Pet</h1>
 
