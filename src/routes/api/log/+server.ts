@@ -1,14 +1,22 @@
 import type { RequestHandler } from '@sveltejs/kit';
-import fs from 'fs/promises';
+import { readFile } from 'fs/promises';
+import { json } from '@sveltejs/kit';
 import path from 'path';
 
 const logPath = path.resolve('static/data/log.json');
 
 export const GET: RequestHandler = async () => {
 	try {
-		const logs: string[] = JSON.parse(await fs.readFile(logPath, 'utf-8'));
-		return new Response(JSON.stringify(logs), { status: 200 });
+		const raw = await readFile(logPath, 'utf-8');
+		const logs = JSON.parse(raw);
+
+		if (!Array.isArray(logs)) {
+			throw new Error('Log data is not an array');
+		}
+
+		return json(logs);
 	} catch (err) {
-		return new Response('Failed to read logs.', { status: 500 });
+		console.error('Failed to load logs:', err);
+		return json({ error: 'Could not load logs' }, { status: 500 });
 	}
 };
