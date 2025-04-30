@@ -1,2 +1,56 @@
 [
+  {
+    "id": 1,
+    "name": "Teddy",
+    "type": "puppy",
+    "hunger": 10,
+    "happiness": 90,
+    "adopted": true,
+    "owner": "02"
+  },
+  {
+    "id": 2,
+    "name": "Lolo",
+    "type": "kitten",
+    "hunger": 20,
+    "happiness": 85,
+    "adopted": true,
+    "owner": "01"
+  },
+  {
+    "id": 3,
+    "name": "Snow",
+    "type": "puppy",
+    "hunger": 0,
+    "happiness": 100,
+    "adopted": false,
+    "owner": null
+  },
+  {
+    "id": 4,
+    "name": "Mimi",
+    "type": "kitten",
+    "hunger": 25,
+    "happiness": 70,
+    "adopted": false,
+    "owner": null
+  },
+  {
+    "id": 5,
+    "name": "Jasper",
+    "type": "puppy",
+    "hunger": 40,
+    "happiness": 50,
+    "adopted": true,
+    "owner": "01"
+  },
+  {
+    "id": 6,
+    "name": "Soso",
+    "type": "kitten",
+    "hunger": 15,
+    "happiness": 95,
+    "adopted": false,
+    "owner": null
+  }
 ]

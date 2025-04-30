@@ -1,2 +1,42 @@
 [
+  {
+    "id": "01",
+    "name": "leila",
+    "passwordHash": "$2b$10$XyP2eA0B5Cd9eFrYW6sZCug/nup4kxTqMge0Zv.C64QdLZT31sOXW",
+    "budget": 85,
+    "inventory": {
+      "food": 1,
+      "toy": 2,
+      "treat": 0
+    },
+    "PetId": [2, 5],
+    "role": "user"
+  },
+  {
+    "id": "02",
+    "name": "samuel",
+    "passwordHash": "$2b$10$6LZ3XoYZceEgzNjDByD1IuMuP2ZKj9t4/RIWTMd3GMQhXzPLTqHAm",
+    "budget": 40,
+    "inventory": {
+      "food": 0,
+      "toy": 1,
+      "treat": 2
+    },
+    "PetId": [1],
+    "role": "user"
+  },
+  {
+    "id": "03",
+    "name": "mira",
+    "passwordHash": "$2b$10$Fw1XvRgFoFoFV.8nOWGz2eZYRh9cyOjWY0FSBhPCFt6SK5qZZ52xq",
+    "budget": 100,
+    "inventory": {
+      "food": 0,
+      "toy": 0,
+      "treat": 0
+    },
+    "PetId": [],
+    "role": "admin"
+
+  }
 ]
