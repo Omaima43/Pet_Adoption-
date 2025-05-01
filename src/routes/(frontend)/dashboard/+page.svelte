@@ -5,14 +5,14 @@
 
     export let data: { user: SafeUser; pets: Pet[] };
 
-    let user = data.user;
-    let pets = data.pets;
+    let pets: Pet[] = data.pets;
+    let user: SafeUser = data.user;
+    let success = '';
     let error = '';
-    let message = '';
 
-    async function takeCare(petId: number, action: 'feed' | 'toy' | 'return') {
+    async function handleAction(petId: number, action: 'feed' | 'toy' | 'return') {
+        success = '';
         error = '';
-        message = '';
         try {
             const res = await fetch('/api/actions', {
                 method: 'POST',
@@ -21,25 +21,25 @@
             });
             const result = await res.json();
             if (res.ok) {
+                pets = result.pets;
                 currentUser.set(result.user);
                 user = result.user;
-                pets = result.pets;
-                message = result.message || 'Action completed.';
+                success = result.message;
             } else {
                 if (result.redirectTo) {
-                    goto(result.redirectTo);
+                    await goto(result.redirectTo);
                 } else {
-                    error = result.error || 'Something went wrong.';
+                    error = result.error || 'Action failed.';
                 }
             }
         } catch {
-            error = 'Server error during action.';
+            error = 'Something went wrong.';
         }
     }
 
-    async function purchase(item: 'food' | 'toy') {
+    async function buy(item: 'food' | 'toy') {
+        success = '';
         error = '';
-        message = '';
         try {
             const res = await fetch('/api/shop', {
                 method: 'POST',
@@ -50,124 +50,145 @@
             if (res.ok) {
                 currentUser.set(result.user);
                 user = result.user;
-                message = result.message;
+                success = result.message;
             } else {
-                error = result.error || 'Could not complete purchase.';
+                error = result.error || 'Purchase failed.';
             }
         } catch {
-            error = 'Shop request failed.';
+            error = 'Failed to process purchase.';
         }
     }
 </script>
 
-<main>
-    <h2>Welcome back, {user.name}!</h2>
+<h1>Your Dashboard</h1>
 
-    <section class="status-box">
-        <p><strong>Available Funds:</strong> ${user.budget}</p>
-        <p><strong>Items:</strong> 🥫 Food: {user.inventory.food} | 🧸 Toy: {user.inventory.toy} | 🍬 Treat: {user.inventory.treat}</p>
-    </section>
+{#if success}<p class="success">{success}</p>{/if}
+{#if error}<p class="error">{error}</p>{/if}
 
-    {#if message}
-        <p class="message">{message}</p>
-    {/if}
-    {#if error}
-        <p class="error">{error}</p>
-    {/if}
+<div class="info">
+    <p><strong>Budget:</strong> ${user.budget}</p>
+    <p><strong>Inventory:</strong>  {user.inventory.food} food,  {user.inventory.toy} toys,  {user.inventory.treat} treats</p>
+</div>
 
-    <section class="shop">
-        <h3>Marketplace</h3>
-        <button on:click={() => purchase('food')}>Buy Food - $5</button>
-        <button on:click={() => purchase('toy')}>Buy Toy - $10</button>
-    </section>
+<div class="shop">
+    <h2>Shop</h2>
+    <button on:click={() => buy('food')}>Buy Food ($5)</button>
+    <button on:click={() => buy('toy')}>Buy Toy ($10)</button>
+</div>
 
-    <section>
-        <h3>Adopted Companions</h3>
-        {#if pets.length === 0}
-            <p>No pets adopted yet.</p>
-        {:else}
-            <ul class="pet-list">
-                {#each pets as pet}
-                    <li>
-                        <h4>{pet.name} <span>({pet.type})</span></h4>
-                        <p>Hunger: {pet.hunger} | Happiness: {pet.happiness}</p>
-                        <div class="actions">
-                            <button on:click={() => takeCare(pet.id, 'feed')}>Feed</button>
-                            <button on:click={() => takeCare(pet.id, 'toy')}>Play</button>
-                            <button on:click={() => takeCare(pet.id, 'return')}>Return</button>
-                        </div>
-                    </li>
-                {/each}
-            </ul>
-        {/if}
-    </section>
-</main>
+<h2>Your Adopted Pets</h2>
+{#if pets.length === 0}
+    <p class="empty">You haven’t adopted any pets yet.</p>
+{:else}
+    <div class="grid">
+        {#each pets as pet}
+            <div class="card">
+                <div class="emoji">{pet.type === 'puppy' ? '🐶' : '🐱'}</div>
+                <h3>{pet.name}</h3>
+                <p>Hunger: {pet.hunger}</p>
+                <p>Happiness: {pet.happiness}</p>
+
+                <div class="actions">
+                    <button on:click={() => handleAction(pet.id, 'feed')}>Feed (−$5)</button>
+                    <button on:click={() => handleAction(pet.id, 'toy')}>Play (−$10)</button>
+                    <button on:click={() => handleAction(pet.id, 'return')}>Return (−$20)</button>
+                </div>
+            </div>
+        {/each}
+    </div>
+{/if}
 
 <style>
-    main {
-        max-width: 800px;
-        margin: 2rem auto;
-        padding: 1.5rem;
-        background: #fafafa;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-    }
-
-    h2 {
+    h1 {
         text-align: center;
         margin-bottom: 1rem;
     }
 
-    .status-box {
-        background: #eef;
-        padding: 1rem;
-        border-radius: 6px;
-        margin-bottom: 1.5rem;
+    .info {
+        margin: 1rem 0;
+        text-align: center;
     }
 
-    .shop {
-        margin: 2rem 0;
-    }
-
-    button {
-        margin-right: 0.8rem;
-        margin-top: 0.5rem;
-        padding: 0.4rem 0.8rem;
-        font-size: 0.95rem;
-        cursor: pointer;
-    }
-
-    .pet-list {
-        list-style: none;
-        padding: 0;
-    }
-
-    .pet-list li {
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        margin-bottom: 1rem;
-        padding: 1rem;
-        background: #fff;
-    }
-
-    .pet-list h4 {
-        margin: 0 0 0.5rem 0;
-    }
-
-    .pet-list .actions {
-        margin-top: 0.8rem;
-    }
-
-    .message {
+    .success {
         color: green;
         text-align: center;
         margin-bottom: 1rem;
     }
-
     .error {
         color: red;
         text-align: center;
         margin-bottom: 1rem;
     }
-</style>
 
+    .shop {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .shop button {
+        margin: 0.5rem;
+        padding: 0.5rem 1rem;
+        background-color: #007acc;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .shop button:hover {
+        background-color: #005fa3;
+    }
+
+    h2 {
+        text-align: center;
+        margin: 1.5rem 0 1rem;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1.5rem;
+        padding: 0 1rem;
+    }
+
+    .card {
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 1rem;
+        text-align: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+        transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-4px);
+    }
+
+    .emoji {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .actions button {
+        margin: 0.3rem;
+        padding: 0.4rem 0.8rem;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.9rem;
+    }
+
+    .actions button:hover {
+        background-color: #1e7e34;
+    }
+
+    .empty {
+        text-align: center;
+        font-style: italic;
+        color: #666;
+    }
+</style>

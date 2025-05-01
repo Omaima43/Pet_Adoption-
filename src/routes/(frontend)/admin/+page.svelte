@@ -49,7 +49,7 @@
     }
 </script>
 
-<h1>➕ Add a New Pet</h1>
+<h1>Add a New Pet</h1>
 
 {#if error}
     <p class="error">{error}</p>

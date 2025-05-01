@@ -3,10 +3,6 @@
     import { goto } from '$app/navigation';
     import { writable } from 'svelte/store';
 
-    let userData = $currentUser;
-
-    $: userData = $currentUser;
-
     const notice = writable<string | null>(null);
 
     async function handleLogout() {
@@ -35,16 +31,16 @@
     <nav class="menu">
         <a href="/">🏠</a>
 
-        {#if userData}
+        {#if $currentUser}
             <a href="/dashboard">My Pets</a>
             <a href="/shop">Shop</a>
 
-            {#if userData.role === 'admin'}
+            {#if $currentUser.role === 'admin'}
                 <a href="/admin">Admin</a>
                 <a href="/logs">Logs</a>
             {/if}
 
-            <span class="username">{userData.name}</span>
+            <span class="username">{$currentUser.name}</span>
             <button on:click={handleLogout}>Logout</button>
         {:else}
             <a href="/login">Login</a>

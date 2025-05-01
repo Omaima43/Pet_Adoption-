@@ -5,6 +5,7 @@
     let password = '';
     let confirmPassword = '';
     let error = '';
+    let isAdmin = false;
 
     async function handleRegister() {
         error = '';
@@ -13,11 +14,12 @@
             error = 'Passwords do not match';
             return;
         }
+        const role = isAdmin ? 'admin' : 'user';
 
         const res = await fetch('/api/auth/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, password })
+            body: JSON.stringify({ name, password, role })
         });
 
         const data = await res.json();
@@ -54,6 +56,11 @@
             <input type="password" bind:value={confirmPassword} required />
         </label>
 
+        <label class="checkbox">
+            <input type="checkbox" bind:checked={isAdmin} />
+            Register as Admin
+        </label>
+
         <button type="submit">Register</button>
     </form>
 </main>
@@ -87,7 +94,15 @@
         color: #333;
     }
 
-    input {
+    .checkbox {
+        flex-direction: row;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: normal;
+    }
+
+    input[type="text"],
+    input[type="password"] {
         padding: 0.5rem;
         border: 1px solid #ccc;
         border-radius: 4px;

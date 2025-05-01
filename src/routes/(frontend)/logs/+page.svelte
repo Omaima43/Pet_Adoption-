@@ -22,7 +22,7 @@
     });
 </script>
 
-<h1>📖 Activity History</h1>
+<h1>Activity History</h1>
 
 {#if fetchError}
     <p class="alert">{fetchError}</p>

@@ -8,10 +8,16 @@ const usersPath = path.resolve('static/data/users.json');
 
 export const POST: RequestHandler = async ({ request, cookies }) => {
 	try {
-		const { name, password } = await request.json();
+		const { name, password, role } = await request.json();
 
-		if (!name || !password) {
-			return json({ error: 'Username and password are required' }, { status: 400 });
+		if (!name || !password || !role) {
+			return json({ error: 'Missing username, password, or role' }, { status: 400 });
+		}
+		if (!['user', 'admin'].includes(role)) {
+			return json({ error: 'Invalid role selected' }, { status: 400 });
+		}
+		if (!['user', 'admin'].includes(role)) {
+			return json({ error: 'Invalid role selected' }, { status: 400 });
 		}
 
 		const raw = await readFile(usersPath, 'utf-8');
@@ -24,14 +30,13 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 
 		const passwordHash = await bcrypt.hash(password, 10);
 
-		// Auto-increment numeric ID
 		const maxId = Math.max(0, ...users.map((u: any) => parseInt(u.id ?? '0')));
 		const newUser = {
-			id: String(maxId + 1).padStart(2, '0'), // e.g. "01", "02"
+			id: String(maxId + 1).padStart(2, '0'),
 			name,
 			passwordHash,
 			budget: 100,
-			role: 'user',
+			role, // ✅ use provided role
 			inventory: { food: 0, toy: 0, treat: 0 },
 			PetId: []
 		};
