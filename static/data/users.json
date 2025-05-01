@@ -9,7 +9,10 @@
       "toy": 2,
       "treat": 0
     },
-    "PetId": [2, 5],
+    "PetId": [
+      2,
+      5
+    ],
     "role": "user"
   },
   {
@@ -22,7 +25,9 @@
       "toy": 1,
       "treat": 2
     },
-    "PetId": [1],
+    "PetId": [
+      1
+    ],
     "role": "user"
   },
   {
@@ -37,6 +42,21 @@
     },
     "PetId": [],
     "role": "admin"
-
+  },
+  {
+    "id": "04",
+    "name": "omi",
+    "passwordHash": "$2b$10$5JdCzLF8uVve94P9jvcVle58nACon0h7Jhzc5syE5qVUP32Dne2p2",
+    "budget": 100,
+    "role": "user",
+    "inventory": {
+      "food": 0,
+      "toy": 0,
+      "treat": 0
+    },
+    "PetId": [],
+    "pets": [
+      4
+    ]
   }
 ]

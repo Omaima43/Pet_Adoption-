@@ -24,7 +24,8 @@
     "hunger": 0,
     "happiness": 100,
     "adopted": false,
-    "owner": null
+    "owner": null,
+    "ownerId": "04"
   },
   {
     "id": 4,
@@ -32,8 +33,9 @@
     "type": "kitten",
     "hunger": 25,
     "happiness": 70,
-    "adopted": false,
-    "owner": null
+    "adopted": true,
+    "owner": null,
+    "ownerId": "04"
   },
   {
     "id": 5,
@@ -51,6 +53,7 @@
     "hunger": 15,
     "happiness": 95,
     "adopted": false,
-    "owner": null
+    "owner": null,
+    "ownerId": "04"
   }
 ]
