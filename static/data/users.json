@@ -58,5 +58,18 @@
     "pets": [
       4
     ]
+  },
+  {
+    "id": "07",
+    "name": "eee",
+    "passwordHash": "$2b$10$FyLqBcd3/WYV2sBLO9HO.e44M8GiJnr3XRM6yZ/5nD4f5SX33WijW",
+    "budget": 95,
+    "role": "admin",
+    "inventory": {
+      "food": 1,
+      "toy": 0,
+      "treat": 0
+    },
+    "PetId": []
   }
 ]

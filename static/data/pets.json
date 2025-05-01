@@ -23,9 +23,9 @@
     "type": "puppy",
     "hunger": 0,
     "happiness": 100,
-    "adopted": false,
+    "adopted": true,
     "owner": null,
-    "ownerId": "04"
+    "ownerId": "05"
   },
   {
     "id": 4,
